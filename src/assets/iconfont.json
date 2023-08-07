@@ -1,0 +1,37 @@
+{
+  "id": "4194664",
+  "name": "music",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "386239",
+      "name": "循环2",
+      "font_class": "xunhuan1",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "1159895",
+      "name": "循环",
+      "font_class": "xunhuan",
+      "unicode": "e61f",
+      "unicode_decimal": 58911
+    },
+    {
+      "icon_id": "12550391",
+      "name": "重复",
+      "font_class": "zhongfu",
+      "unicode": "e628",
+      "unicode_decimal": 58920
+    },
+    {
+      "icon_id": "31142662",
+      "name": "顺序",
+      "font_class": "sequence",
+      "unicode": "e667",
+      "unicode_decimal": 58983
+    }
+  ]
+}

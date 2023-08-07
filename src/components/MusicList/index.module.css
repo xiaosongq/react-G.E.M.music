@@ -1,0 +1,29 @@
+.music-list {
+  height: calc(100% - 113px);
+  overflow-y: scroll;
+}
+.music-list li{
+  text-align: center;
+  height: 40px;
+  line-height: 40px;
+  /* border-bottom: 1px solid #5f7db366; */
+  color: #fff;
+  cursor: pointer;
+}
+.music-list li:nth-child(odd){
+  /* background-color: #B8CAD866; */
+}
+
+.rotate {
+  display: inline-block;
+  animation: rotate paused infinite 4s linear;
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

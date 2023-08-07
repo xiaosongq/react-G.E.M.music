@@ -1,0 +1,70 @@
+.lyric-content {
+  text-align: center;
+  height: 100%;
+  position: relative;
+}
+.lyric-content>div {
+  overflow: hidden;
+  height:calc(100% - 120px);
+  position: relative;
+}
+.lyric-content ul {
+  transition:all 0.5s;
+  color: white;
+  transform: translateY(0%);
+  margin-top: 350px;
+  line-height: 30px;
+  overflow: hidden;
+}
+.lyric-content ul {
+  cursor: pointer;
+}
+.highlight {
+  color: red;
+  font-size: 20px;
+}
+.quan {
+  width: 250px;
+  height: 250px;
+  transform: translate(-50%, -50%);
+  animation: rotate infinite 8s linear paused;
+
+  background: url('../../assets/disc.png') no-repeat center/cover;
+}
+.lyric-content .album-art {
+  position:absolute;
+  top:50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 152px;
+  height: 152px;
+  border-radius: 100%;
+  background: url('../../assets/music/少年与海.jpg') no-repeat center/cover;
+}
+.record {
+  position:absolute;
+  top:30%;
+  right: -125px;
+  z-index: 10;
+}
+.needle {
+  width: 170px;
+  height: 260px;
+  z-index: 11;
+  position:absolute;
+  top:-135px;
+  left: 143px;
+  background: url('../../assets/needle.png') no-repeat center/cover;
+  zoom: 0.7;
+  /* transform-origin: 0;
+  transform: rotateZ(45deg); */
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

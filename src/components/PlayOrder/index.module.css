@@ -1,0 +1,14 @@
+.playorder {
+  width: 100%;
+  height: 100px;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  color: white;
+  /* border-bottom: 1px solid #fff; */
+}
+
+.playorder div {
+  text-align: center;
+  cursor: pointer;
+}

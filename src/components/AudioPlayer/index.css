@@ -1,0 +1,136 @@
+.play-wrap{
+  width: 100%;
+  margin:0 auto;
+  padding-top:6px;
+  color: #fff;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  border-top: 1px solid #fff;
+}
+.control {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+.btns{
+  position: relative;
+  width: 150px;
+  padding:6px 0 0 0;
+  display: flex;
+  margin-bottom: 10px;
+  justify-items: center;
+  justify-content: space-between;
+}
+.btns button {
+  border: none;
+  background-color: transparent;
+}
+.btns>.prev,.btns>.next{
+  display:block;
+  width: 28px;
+  height: 28px;
+  margin-top:5px;
+  background-image: url("../../assets/playbar.png");
+  background-repeat: no-repeat;
+  background-position:0 -130px;
+
+}
+.btns>.next{
+  background-position:-80px -130px;
+
+}
+.btns>.ply{
+  display:block;
+  width: 36px;
+  height: 36px;
+  background-image: url("../../assets/playbar.png");
+  background-repeat: no-repeat;
+  background-position:0 -204px;
+}
+.hand-play{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.words>button:first-child{
+  float: left;
+  color:#e8e8e8;  
+}
+.f-thides{
+  float: left;
+  margin-left:15px;
+  color:#9d9d9d;
+}
+.src{
+  display: inline-block;
+  width: 14px;
+  height: 15px;
+  margin:7px 0 0 13px;
+  background-image: url("../../assets/playbar.png");
+  background-repeat: no-repeat;
+  background-position:-110px -103px;
+}
+.bottomBar{
+  width: 550px;
+  text-align: right;
+  color:#797979;
+  font-size: 12px;
+  line-height: 9px;
+}
+.right-oper>button{
+  float:left;
+  width: 25px;
+  height: 25px;
+  margin:11px 2px 0 0;
+}
+.right-oper>button:nth-child(1){
+  
+  /* background-image: url("./网易云图片(1)/画中画.png"); */
+  background-position:0 0;
+}
+.right-oper>button:nth-child(2){
+  
+  background-image: url("../../assets/playbar.png");
+  background-position:-90px -162px;
+}
+.right-oper>button:nth-child(3){
+  
+  background-image: url("../../assets/playbar.png");
+  background-position:-118px -162px;
+}
+.ctrl{
+  float:left;
+  width: 113px;
+  padding-left:13px;
+  background-image: url("../../assets/playbar.png");
+  background-position: -147px -238px;
+  background-repeat: no-repeat;
+}
+.volume{
+  display: inline-block;
+  width: 25px;
+  height: 25px;
+  background-image: url("../../assets/playbar.png");
+  background-position: -153px -250px;
+}
+
+.btns>.plyPlay {
+  background-position: 0 -165px;
+}
+
+.ant-slider-handle:hover::after {
+  box-shadow: 0 0 0 4px red !important;
+} 
+.ant-slider-vertical {
+  width: 10px !important;
+}
+.ant-popover-inner {
+  /* background-color: transparent !important; */
+  background-image: url("../../assets/playbar.png");
+  background-position: 0px -503px;
+  padding: 0 !important;
+  border-radius: 0 !important;
+}
+
