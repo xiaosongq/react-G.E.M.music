@@ -4,9 +4,12 @@ import PlayOrder from './components/PlayOrder';
 import MusicList from './components/MusicList';
 import Lyric from './components/Lyric';
 import AudioPlayer from './components/AudioPlayer';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-function App({checkMusic}) {
+
+
+export default function App() {
+  let checkMusic = useSelector(state => state.checkMusic);
   return (
       <div className='container'>
         {/* 背景 */}
@@ -26,12 +29,3 @@ function App({checkMusic}) {
       </div>
     )
   }
-
-export default connect(
-    // 第一个函数用来将全局状态数据 添加为组件props中
-    (state) => { 
-      return {
-        checkMusic: state.checkMusic
-      };
-    }
-    )(App);

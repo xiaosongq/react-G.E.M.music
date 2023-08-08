@@ -1,17 +1,20 @@
 import React, { useState } from 'react'
 import style from './index.module.css'
-import { connect } from 'react-redux';
+import {  useSelector, useDispatch } from 'react-redux';
+
 import { playStateAction } from '@/store/action';
 
-function PlayOrder({order, playStateAction}) {
+export default function PlayOrder() {
+  let order = useSelector(state => state.playState);
   let [select, setSelect] = useState(order);
 
+  let dispatch = useDispatch();
   // 点击切换播放形式的函数
   function changeOrder(e) {
     // 让当前点击的播放形式高亮
     setSelect(e.target.dataset.id)
     // 设置给全局变量
-    playStateAction(e.target.dataset.id);
+    dispatch(playStateAction(e.target.dataset.id));
   }
 
   return (
@@ -31,16 +34,3 @@ function PlayOrder({order, playStateAction}) {
   </div>
   )
 }
-
-export default connect(
-  (state) => {
-    return {
-      order: state.playState
-    }
-  },
-  (dispatch) => {
-    return {
-      playStateAction: (playState) => dispatch(playStateAction(playState))
-    }
-  }
-)(PlayOrder)

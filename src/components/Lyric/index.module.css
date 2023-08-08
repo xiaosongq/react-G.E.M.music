@@ -16,8 +16,9 @@
   line-height: 30px;
   overflow: hidden;
 }
-.lyric-content ul {
+.lyric-content li {
   cursor: pointer;
+  padding: 8px 0;
 }
 .highlight {
   color: red;
@@ -26,9 +27,8 @@
 .quan {
   width: 250px;
   height: 250px;
-  transform: translate(-50%, -50%);
+  /* transform: translate(-50%, -50%); */
   animation: rotate infinite 8s linear paused;
-
   background: url('../../assets/disc.png') no-repeat center/cover;
 }
 .lyric-content .album-art {
@@ -48,23 +48,24 @@
   z-index: 10;
 }
 .needle {
-  width: 170px;
-  height: 260px;
+  width: 276px;
+  height: 414px;
   z-index: 11;
   position:absolute;
-  top:-135px;
-  left: 143px;
-  background: url('../../assets/needle.png') no-repeat center/cover;
-  zoom: 0.7;
-  /* transform-origin: 0;
-  transform: rotateZ(45deg); */
+  top:-200px;
+  left: 46%;
+  background: url('../../assets/circleNeedle.png') no-repeat center/cover;
+  zoom: 0.4;
+  transition: all 0.5s;
+  transform-origin: 48px 48px;
+  transform: rotateZ(-25deg);
 }
 
 @keyframes rotate {
   from {
-    transform: rotate(0deg);
+    rotate: 0deg;
   }
   to {
-    transform: rotate(360deg);
+    rotate: 360deg;
   }
 }

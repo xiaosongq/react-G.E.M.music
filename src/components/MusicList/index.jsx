@@ -1,15 +1,20 @@
 import React, { useEffect, useState, useMemo } from 'react'
 import musicList from '@/assets/music/music-list.json'
 import style from './index.module.css'
-import { connect } from 'react-redux'
-import { noRotateAction, changeMusicAction, yesRotateAction, musicCurrentTimeAction } from '@/store/action'
+import { useSelector, useDispatch } from 'react-redux'
+import { changeMusicAction, yesRotateAction } from '@/store/action'
 
-function MusicList({rotate, checkMusic, changeMusicAction, yesRotateAction, musicCurrentTimeAction}) {
+export default function MusicList() {
+  let checkMusic = useSelector(state => state.checkMusic);
+  let rotate = useSelector(state => state.ifRotate);
+
+  let dispatch = useDispatch();
+
   let [state, setState] = useState(checkMusic);
   useEffect(() => {
+    console.log(checkMusic)
     setState(checkMusic)
-    musicCurrentTimeAction('00:00');
-  }, [checkMusic, musicCurrentTimeAction])
+  }, [checkMusic])
 
   // 切换歌名执行的函数
   function change(e) {
@@ -20,9 +25,9 @@ function MusicList({rotate, checkMusic, changeMusicAction, yesRotateAction, musi
   }
   // 防止切换速度过快导致一些不可控 bug
   timer = setTimeout(() => {
-    changeMusicAction(e.target.dataset.name)
-    yesRotateAction();
-  }, 500);
+    dispatch(changeMusicAction(e.target.dataset.name))
+    dispatch(yesRotateAction());
+  }, 100);
 
   }
   // 判断当前播放歌曲开头图标是否旋转
@@ -56,28 +61,3 @@ function MusicList({rotate, checkMusic, changeMusicAction, yesRotateAction, musi
   </div>
   )
 }
-
-
-export default connect(
-  // 第一个函数用来将全局状态数据 添加为组件props中
-  (state) => { 
-    return {
-      // 当前播放歌曲名称
-      checkMusic: state.checkMusic,
-      // 是否旋转
-      rotate: state.ifRotate
-    };
-    },
-    (dispatch) => {
-      return {
-        // 切换歌名
-        changeMusicAction: (musicName) => dispatch(changeMusicAction(musicName)),
-        // 旋转
-        yesRotateAction:() =>  dispatch(yesRotateAction()),
-        // 不旋转
-        noRotateAction:() =>  dispatch(noRotateAction()),
-        // 当前时间字符串形式 00:00
-        musicCurrentTimeAction: (time) => dispatch(musicCurrentTimeAction(time))
-      }
-    }
-  )(MusicList);

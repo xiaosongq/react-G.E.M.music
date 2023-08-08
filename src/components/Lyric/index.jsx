@@ -1,10 +1,23 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import axios from 'axios'
-import { connect } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import style from './index.module.css'
 import { musicCurrentTimeAction } from '@/store/action'
 
-function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, musicCurrentTimeAction, playerState, selectIrcAction}) {
+export default function Lyric() {
+  // 是否旋转
+  let rotate = useSelector(state => state.ifRotate);
+  // 选中歌名
+  let checkMusic = useSelector(state => state.checkMusic);
+  // musicCurrentTime 字符串形式
+  let musicCurrentTime = useSelector(state => state.musicCurrentTime)
+  // 播放方式
+  let order = useSelector(state => state.playState);
+  // 秒时间
+  let playerState = useSelector(state => state.player);
+
+  let dispatch = useDispatch();
+
   let [currentLyric, setCurrentLyric] = useState([]);
   // 是否自动播放
   let [autoScroll, setAutoScroll] = useState(true);
@@ -12,9 +25,19 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
   let [scroll, setScroll] = useState(0);
   let ulScroll = useRef(null);
   let divScroll = useRef(null);
+  let rotateNeedle = useRef(null);
   // 当前歌词行
-  let [line, setLine] = useState(0);
+  let [line, setLine] = useState(-1);
   var lyricsItems = document.querySelectorAll('#geci li');
+  // 拿到歌词高度
+  let [lyricHeight, setLyricHeight] = useState(46);
+
+  // playerState
+  useEffect(() => {
+    if(playerState === 0) {
+      setScroll(0);
+    }
+  }, [playerState])
 
   // 切换歌名执行的初始化函数
   useEffect(() => {
@@ -24,21 +47,24 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
         setCurrentLyric(parseLyric(temp.data).lrc);
       })();
       // 将当前行设置为第一行 0
-    setLine(0);
+    setLine(-1);
     // 将当前滚动高度设置为 0
     setScroll(0);
     // 当前歌曲播放进度
-    musicCurrentTimeAction('00:00');
+    dispatch(musicCurrentTimeAction('00:00'));
     // 歌词容器高度
     ulScroll.current.style.transform = `translateY(0px)`
 
-  }, [checkMusic, musicCurrentTimeAction]);
+  }, [checkMusic]);
 
   // 判断每秒进度是否和其中一行歌词时间匹配 匹配的话歌词高亮 并滚动 时间精确到秒
   useEffect(() => {
+    if(lyricsItems.length) {
+      setLyricHeight(lyricsItems[1].offsetHeight)
+    }
     // 如果播放方式为重复
     if(order === '重复' || musicCurrentTime === '00:00') {
-      setLine(0);
+      setLine(-1);
     }
     // 定义歌词时间数组
     let arr = [];
@@ -46,11 +72,10 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
       arr.push(lyricsItems[i].dataset.time?.split(':').join('') *1)
       // 如果没有等于当前歌词行，就查找最近的时间点 歌词高亮
       if (lyricsItems[i].dataset.time?.split(':').join('') *1 === musicCurrentTime?.split(':').join('')* 1) {
-          console.log(autoScroll)
+
           setLine(i);
           // 是否开启自动滚动，如果开启直接设置当前高度
           if(autoScroll) {
-            console.log(i)
             setScroll(i);
           }
         break;
@@ -69,7 +94,6 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
       }
     }
   
-  
   // setscrollHeight(((currentLyric.length - 9) / window.parseInt(window.getComputedStyle(ulScroll.current).height) * 100).toFixed(2));
   }, [musicCurrentTime, order, lyricsItems, autoScroll, scroll])
 
@@ -81,8 +105,11 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
     if(rotateCover.current) {
       if(rotate) {
         rotateCover.current.style.animationPlayState = "running";
+        rotateNeedle.current.style.transform = "rotateZ(0deg)";
+        
       } else {
         rotateCover.current.style.animationPlayState = "paused";
+        rotateNeedle.current.style.transform = "rotateZ(-25deg)";
       }
     }
 
@@ -163,18 +190,15 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
       }
       // e.deltaY 整数为向上滚动 负数为向下滚动
       if(e.deltaY < 0) {
-        console.log(scroll)
         // 限制滚动位置 避免滚出准确位置
-        if(`-${scroll * 30}` < 0) {
+        if(`-${scroll * lyricHeight}` < 0) {
           // setScroll(++scroll);
-          ulScroll.current.style.transform = `translateY(-${--scroll * 30}px)`
+          ulScroll.current.style.transform = `translateY(-${--scroll * lyricHeight}px)`
         }
       } else {
-        console.log(scroll)
-        console.log(Number(`-${scroll * 30}`))
 
-        if(((scroll * 30 === 0 ? scroll * 30 : Number(`-${scroll * 30}`)) >= Number(`-${window.parseInt(window.getComputedStyle(ulScroll.current).height)}`))) {
-            ulScroll.current.style.transform = `translateY(-${++scroll * 30}px)`
+        if(((scroll * lyricHeight === 0 ? scroll * lyricHeight : Number(`-${scroll * lyricHeight}`)) >= Number(`-${window.parseInt(window.getComputedStyle(ulScroll.current).height)}`))) {
+            ulScroll.current.style.transform = `translateY(-${++scroll * lyricHeight}px)`
           
         }
       }
@@ -183,7 +207,7 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
         setAutoScroll(true);
         // 将当前滚动位置设置为当前时间行
         setScroll(line);
-        ulScroll.current.style.transform = `translateY(-${line * 30}px)`
+        ulScroll.current.style.transform = `translateY(-${line * lyricHeight}px)`
       }, 4000);
     }
     // 如果为addEventlistener 每次都会添加一个事件 如果函数只让它进来的时候执行一次，
@@ -202,9 +226,9 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
     function clickLrc(item, i) {
         setAutoScroll(false);
         setLine(i);
-        playerStateAction((item.time.m * 60) + item.time.s * 1);
-        musicCurrentTimeAction(`${item.time.m}:${item.time.s}`);
-        selectIrcAction({s: (item.time.m * 60) + item.time.s * 1, str: `${item.time.m}:${item.time.s}`});
+        dispatch({type: 'OBJ', data:(item.time.m * 60) + item.time.s * 1});
+        dispatch(musicCurrentTimeAction(`${item.time.m}:${item.time.s}`));
+        dispatch({type: 'OK', data: {s: (item.time.m * 60) + item.time.s * 1, str: `${item.time.m}:${item.time.s}`}});
         // 切换为自动滚动
         setTimeout(() => setAutoScroll(true), 200);
       
@@ -213,7 +237,7 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
   return (
     <div id='geci' ref={divScroll} className={style['lyric-content']}>
         <div>
-          <ul ref={ulScroll} style={{transform: `translateY(-${(scroll * 30)}px)`}}>
+          <ul ref={ulScroll} style={{transform: `translateY(-${(scroll * lyricHeight)}px)`}}>
           {
             currentLyric.map((item, i) => {
               return <li 
@@ -229,7 +253,7 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
         </div>
 
         <aside className={style.record}>
-        <div className={style.needle}></div>
+        <div ref={rotateNeedle} className={style.needle}></div>
         <div ref={rotateCover} className={style.quan}>
           <div style={{backgroundImage: (`url(${encodeURI(require(`@/assets/music/${checkMusic}.jpg`))})`)}} className={style['album-art']}>
 
@@ -240,25 +264,3 @@ function Lyric({rotate, checkMusic, musicCurrentTime, order, playerStateAction, 
     </div>
   )
 }
-
-export default connect(
-  // 第一个函数用来将全局状态数据 添加为组件props中
-  (state) => { 
-    return {
-      rotate: state.ifRotate,
-      checkMusic: state.checkMusic,
-      musicCurrentTime: state.musicCurrentTime,
-      order: state.playState,
-      playerState: state.player,
-      
-    };
-    },
-    (dispatch) => { 
-      return {
-        playerStateAction: (obj) => dispatch({type: 'OBJ', data: obj}),
-        musicCurrentTimeAction: (time) => dispatch(musicCurrentTimeAction(time)),
-        // 当前点击歌词切换 data为对象
-        selectIrcAction: (obj) => dispatch({type: 'OK', data: obj}),
-      };
-    }
-  )(Lyric);
